@@ -1,4 +1,5 @@
 from db.conexion_oracle import obtener_conexion
+from tkinter import messagebox
 
 def agregar_biblioteca(id_biblioteca, nombre_biblioteca, ubicacion_biblioteca):
     try:    
@@ -8,6 +9,19 @@ def agregar_biblioteca(id_biblioteca, nombre_biblioteca, ubicacion_biblioteca):
         conexion.commit()
     except Exception as ex:
         print("Error al insertar datos:",ex)
+    finally:
+        cursor.close()
+        conexion.close()
+
+def obtener_bibliotecas2(id, nombre, ubicacion):
+    try:
+        conexion = obtener_conexion()
+        cursor = conexion.cursor()
+        cursor.execute("SELECT id_biblioteca, nombre, ubicacion FROM biblioteca")
+        bibliotecas = cursor.fetchall()
+        return bibliotecas
+    except Exception as ex:
+        messagebox.showerror("ERROR!", "Ocurrio error al obtener bibliotecas: ", ex)
     finally:
         cursor.close()
         conexion.close()
